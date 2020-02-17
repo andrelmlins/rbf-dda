@@ -3,22 +3,22 @@ import Prototype from "./Prototype";
 class RBFDDA {
   private classes: Array<any>;
   private prototypes: Array<Prototype>;
-  private tetamais: number;
-  private tetamenos: number;
+  private tetaMore: number;
+  private tetaLess: number;
 
   constructor(
     points: Array<Array<number>>,
     classes: Array<any>,
-    tetamais: number = 0.4,
-    tetamenos: number = 0.1
+    tetaMore: number = 0.4,
+    tetaLess: number = 0.1
   ) {
     this.prototypes = [];
     this.classes = classes;
     points.map((item, index) =>
       this.prototypes.push(new Prototype(item, classes[index]))
     );
-    this.tetamais = tetamais.valueOf();
-    this.tetamenos = tetamenos.valueOf();
+    this.tetaMore = tetaMore;
+    this.tetaLess = tetaLess;
   }
 
   public run(): Array<Prototype> {
@@ -42,25 +42,25 @@ class RBFDDA {
           prototype.setM(ms);
         } else {
           const ativacao: number = this.activation(
-            prototype.data,
-            prototype.classe
+            prototype.getData(),
+            prototype.getClass()
           );
 
           if (ativacao != -1) {
             let p1: Prototype = this.prototypes[ativacao];
-            p1.setWeight(p1.peso + 1);
+            p1.setWeight(p1.getWeight() + 1);
             this.prototypes[ativacao] = p1;
           } else {
             prototype.setWeight(1);
-            if (this.nClass(prototype.classe).length > 0) {
+            if (this.nClass(prototype.getClass()).length > 0) {
               prototype.setWeight(
-                this.center(prototype.data, prototype.classe)
+                this.center(prototype.getData(), prototype.getClass())
               );
             } else {
               prototype.setCenter(1000);
             }
 
-            if (prototype.m == -1) {
+            if (prototype.getM() === -1) {
               ms++;
               prototype.setM(ms);
             }
@@ -70,21 +70,24 @@ class RBFDDA {
 
         for (let j = 0; j < this.prototypes.length; j++) {
           if (
-            prototype.classe !== this.classes[j] &&
-            this.prototypes[j].m != -1
+            prototype.getClass() !== this.classes[j] &&
+            this.prototypes[j].getM() !== -1
           ) {
             let current: number = Math.sqrt(
               (Math.pow(
-                this.euclideanDistance(prototype.data, this.prototypes[j].data),
+                this.euclideanDistance(
+                  prototype.getData(),
+                  this.prototypes[j].getData()
+                ),
                 2
               ) /
-                Math.log(this.tetamenos)) *
+                Math.log(this.tetaLess)) *
                 -1
             );
             this.prototypes[j].setCenter(
-              current < this.prototypes[j].centro
+              current < this.prototypes[j].getCenter()
                 ? current
-                : this.prototypes[j].centro
+                : this.prototypes[j].getCenter()
             );
           }
         }
@@ -92,7 +95,9 @@ class RBFDDA {
       });
     } while (this.rbfs() != rbfold);
 
-    return this.prototypes.filter((pResult: Prototype) => pResult.m != -1);
+    return this.prototypes.filter(
+      (pResult: Prototype) => pResult.getM() !== -1
+    );
   }
 
   activation(x: Array<number>, classValue: any): number {
@@ -100,11 +105,11 @@ class RBFDDA {
       const prototype: Prototype = this.fromClass(classValue)[i];
       if (
         Math.exp(
-          (Math.pow(this.euclideanDistance(x, prototype.data), 2) /
-            Math.pow(prototype.centro, 2)) *
+          (Math.pow(this.euclideanDistance(x, prototype.getData()), 2) /
+            Math.pow(prototype.getCenter(), 2)) *
             -1 *
-            prototype.peso
-        ) >= this.tetamais
+            prototype.getWeight()
+        ) >= this.tetaMore
       ) {
         return i;
       }
@@ -116,7 +121,7 @@ class RBFDDA {
     let j: number = 0;
 
     this.prototypes.map((item: Prototype) => {
-      if (item.m != -1) {
+      if (item.getM() !== -1) {
         j++;
       }
     });
@@ -130,7 +135,7 @@ class RBFDDA {
     this.nClass(classValue).map((prototype: any) => {
       const value: number = Math.sqrt(
         (Math.pow(this.euclideanDistance(prototype.data, data), 2) /
-          Math.log(this.tetamenos)) *
+          Math.log(this.tetaLess)) *
           -1
       );
 
@@ -142,13 +147,14 @@ class RBFDDA {
 
   nClass(classValue: any): Array<Prototype> {
     return this.prototypes.filter(
-      (item: Prototype) => !item.classe === classValue && item.m != -1
+      (prototype: Prototype) =>
+        prototype.getClass() !== classValue && prototype.getM() !== -1
     );
   }
 
   fromClass(classValue: any): Array<Prototype> {
     return this.prototypes.filter(
-      (prototype: Prototype) => prototype.classe === classValue
+      (prototype: Prototype) => prototype.getClass() === classValue
     );
   }
 

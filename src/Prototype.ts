@@ -1,24 +1,44 @@
 class Prototype {
-  public m: number;
-  public data: Array<number>;
-  public peso: number;
-  public centro: number;
-  public classe: any;
+  private m: number;
+  private data: Array<number>;
+  private weight: number;
+  private center: number;
+  private classValue: any;
 
   constructor(data: Array<number>, classe: any) {
     this.data = data;
     this.m = -1;
-    this.peso = 1;
-    this.centro = 0;
-    this.classe = classe;
+    this.weight = 1;
+    this.center = 0;
+    this.classValue = classe;
+  }
+
+  getClass(): any {
+    return this.classValue;
+  }
+
+  getCenter(): number {
+    return this.center;
+  }
+
+  getM(): number {
+    return this.m;
+  }
+
+  getWeight(): number {
+    return this.weight;
+  }
+
+  getData(): Array<number> {
+    return this.data;
   }
 
   setWeight(weigth: number) {
-    this.peso = weigth;
+    this.weight = weigth;
   }
 
   setCenter(center: number) {
-    this.centro = center;
+    this.center = center;
   }
 
   setM(m: number) {

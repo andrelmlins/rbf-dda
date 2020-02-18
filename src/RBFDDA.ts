@@ -21,7 +21,7 @@ class RBFDDA {
     this.tetaLess = tetaLess;
   }
 
-  public run(): Array<Prototype> {
+  public training() {
     let first: Boolean = true;
     let ms: number = 0;
     let rbfold: number = 0;
@@ -94,13 +94,24 @@ class RBFDDA {
         i++;
       });
     } while (this.rbfs() != rbfold);
-
-    return this.prototypes.filter(
-      (pResult: Prototype) => pResult.getM() !== -1
-    );
   }
 
-  activation(x: Array<number>, classValue: any): number {
+  public classification(points: Array<number>): any {
+    let value = Number.MIN_VALUE;
+    let classResult = null;
+
+    this.classes.map(classeValue => {
+      const activation = this.activation(points, classeValue);
+      if (activation > value) {
+        value = activation;
+        classResult = classeValue;
+      }
+    });
+
+    return classResult;
+  }
+
+  private activation(x: Array<number>, classValue: any): number {
     for (let i = 0; i < this.fromClass(classValue).length; i++) {
       const prototype: Prototype = this.fromClass(classValue)[i];
       if (
@@ -117,7 +128,7 @@ class RBFDDA {
     return -1;
   }
 
-  rbfs(): number {
+  private rbfs(): number {
     let j: number = 0;
 
     this.prototypes.map((item: Prototype) => {
@@ -129,7 +140,7 @@ class RBFDDA {
     return -j;
   }
 
-  center(data: Array<number>, classValue: any): number {
+  private center(data: Array<number>, classValue: any): number {
     let result: number = Number.MAX_VALUE;
 
     this.nClass(classValue).map((prototype: any) => {
@@ -145,20 +156,20 @@ class RBFDDA {
     return result;
   }
 
-  nClass(classValue: any): Array<Prototype> {
+  private nClass(classValue: any): Array<Prototype> {
     return this.prototypes.filter(
       (prototype: Prototype) =>
         prototype.getClass() !== classValue && prototype.getM() !== -1
     );
   }
 
-  fromClass(classValue: any): Array<Prototype> {
+  private fromClass(classValue: any): Array<Prototype> {
     return this.prototypes.filter(
       (prototype: Prototype) => prototype.getClass() === classValue
     );
   }
 
-  euclideanDistance(a1: Array<number>, a2: Array<number>) {
+  private euclideanDistance(a1: Array<number>, a2: Array<number>) {
     let result: number = 0;
     for (let i = 0; i < a1.length; i++) {
       result += Math.pow(a1[i] - a2[i], 2);

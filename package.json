@@ -1,18 +1,31 @@
 {
-  "name": "rbfdda",
+  "name": "rbf-dda",
   "version": "0.1.0",
   "description": "Radial Basis Function (RBF) with Dynamic Decay Adjustment (DDA) algorithm",
-  "main": "index.js",
-  "repository": "https://github.com/andrelmlins/rbfdda",
-  "author": "André Lins",
+  "repository": "https://github.com/andrelmlins/rbf-dda",
+  "author": "André Lins <andrelucas01@hotmail.com> (https://andrelmlins.github.io/)",
+  "homepage": "https://github.com/andrelmlins/rbf-dda",
   "license": "MIT",
+  "main": "dist/index.js",
   "private": false,
-  "build": "tsc",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "devDependencies": {
     "@types/node": "^13.7.1",
     "typescript": "^3.7.5"
   },
   "scripts": {
     "build": "tsc"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/andrelmlins/rbf-dda/issues"
+  },
+  "keywords": [
+    "rbf",
+    "dda",
+    "neural",
+    "neural-network"
+  ]
 }

@@ -1,4 +1,4 @@
-import Prototype from "./Prototype";
+import Prototype from './Prototype';
 
 class RBFDDA {
   private classes: Array<any>;
@@ -13,7 +13,7 @@ class RBFDDA {
     tetaLess: number = 0.1
   ) {
     if (points.length !== classes.length) {
-      throw new Error("Differente size between points and classes");
+      throw new Error('Differente size between points and classes');
     }
 
     this.prototypes = [];

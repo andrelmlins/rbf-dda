@@ -12,6 +12,10 @@ class RBFDDA {
     tetaMore: number = 0.4,
     tetaLess: number = 0.1
   ) {
+    if (points.length !== classes.length) {
+      throw new Error("Differente size between points and classes");
+    }
+
     this.prototypes = [];
     this.classes = classes;
     points.map((item, index) =>

@@ -1,12 +1,13 @@
 {
   "name": "rbf-dda",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Radial Basis Function (RBF) with Dynamic Decay Adjustment (DDA) algorithm",
   "repository": "https://github.com/andrelmlins/rbf-dda",
   "author": "André Lins <andrelucas01@hotmail.com> (https://andrelmlins.github.io/)",
   "homepage": "https://github.com/andrelmlins/rbf-dda",
   "license": "MIT",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "private": false,
   "files": [
     "dist",
@@ -17,7 +18,7 @@
     "typescript": "^3.7.5"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc -p ."
   },
   "bugs": {
     "url": "https://github.com/andrelmlins/rbf-dda/issues"
